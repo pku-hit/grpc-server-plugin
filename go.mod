@@ -1,4 +1,4 @@
-module grpc-server-plugin
+module github.com/pku-hit/grpc-server-plugin
 
 go 1.12
 
