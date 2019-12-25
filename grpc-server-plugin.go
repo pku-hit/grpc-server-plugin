@@ -15,24 +15,28 @@ import (
 var Server = struct {
 	RunMode    string `yaml:"runmode"`
 	GRPCPort   string `yaml:"grpcport"`
-	ConsulHost string `yaml:"ConsulHost"`
-	ConsulPort string `yaml:"ConsulPort"`
 	ServerName string `yaml:"servername"`
+}{}
+
+var Registry = struct {
+	Type string `yaml:"type"`
+	Host string `yaml:"host"`
 }{}
 
 var Service micro.Service
 
 func init() {
 	config, err := ioutil.ReadFile("config/server.yml")
+	registyConfig, err := ioutil.ReadFile("config/registry.yml")
 	if err != nil {
 		fmt.Print(err)
 	}
 	yaml.Unmarshal(config, &Server)
+	yaml.Unmarshal(registyConfig, &Registry)
 
-	consulAddress := Server.ConsulHost + ":" + Server.ConsulPort
 	reg := consul.NewRegistry(func(op *registry.Options) {
 		op.Addrs = []string{
-			consulAddress,
+			Registry.Host,
 		}
 	})
 
